@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
-use App\Jobs\ExampleJob;
-use Illuminate\Support\Facades\Queue;
+use App\Jobs\GiftJob;
 
 use App\Model\User;
 
@@ -51,11 +50,16 @@ class UserController extends Controller
             /* ... Code ommited ... */
         }
 
-        /* ... Code ommited ... */
+        /* ... Code omitted ... */
     }
 
     public function create(Request $request)
     {
+        /* ... Code omitted (validate & save data) ... */
+
+        $this->dispatch(new GiftJob());
+
+        /* ... Code omitted ... */
         return response()->json(['method' => 'create']);
     }
 
