@@ -7,7 +7,10 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Response;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ServerException;
 
 class Handler extends ExceptionHandler
 {
@@ -45,6 +48,20 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return parent::render($request, $e);
+        switch ($e) {
+            case ($e instanceof ConnectException) :
+                return response()->json(
+                    [
+                        'error' => 'connection_error',
+                        'code'  => '123'
+                    ],
+                    Response::HTTP_SERVICE_UNAVAILABLE
+                );
+                break;
+
+            default :
+                return parent::render($request, $e);
+                break;
+        }
     }
 }
